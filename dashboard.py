@@ -45,6 +45,10 @@ class InteractiveDashboard(param.Parameterized):
         gender_math = df[df.gender.isin(['male','female'])]
         pl = gender_math.hvplot.box("math score", by='gender', invert = True)
         return pl
+    def ppppp(self):
+        gender_math = df[df.gender.isin(['male','female'])]
+        pl = gender_math.hvplot.box("math score", by='gender', invert = True)
+        return pl
         
 
     
