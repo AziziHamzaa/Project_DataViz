@@ -6,9 +6,9 @@ import pandas as pd
 import seaborn as sns
 
 # Load Data
-#from bokeh.sampledata.autompg import autompg_clean as df
+
 df = pd.read_csv("StudentsPerformance.csv")
-#idf = df.interactive()
+
 ACCENT_COLOR = pn.template.FastGridTemplate.accent_base_color
 # create a self-contained dashboard class
 class InteractiveDashboard(param.Parameterized):
@@ -39,12 +39,12 @@ class InteractiveDashboard(param.Parameterized):
         df_widget = pn.widgets.Tabulator(df, layout='fit_columns', page_size = 10, sizing_mode='stretch_width' ,header_filters=df_filters)
         return df_widget
     def plot1(self):
-        return df.hvplot.scatter(x='reading score', y='math score', color = ACCENT_COLOR)
+        return df.hvplot.scatter(x='reading score', y='math score', color = ACCENT_COLOR, title = "Scatter Plot")
     def plot2(self):
-        return df.hvplot.scatter(x='writing score', y='math score', color = ACCENT_COLOR)
+        return df.hvplot.scatter(x='writing score', y='math score', color = ACCENT_COLOR, title = "Scatter Plot")
     def plotbox(self):
         gender_math = df[df.gender.isin(['male','female'])]
-        pl = gender_math.hvplot.box(self.yaxis, by='gender', invert = True, color = ACCENT_COLOR)
+        pl = gender_math.hvplot.box(self.yaxis, by='gender', invert = True, color = ACCENT_COLOR, title = "Box Plot")
         return pl
     
         
@@ -55,10 +55,12 @@ dashboard = InteractiveDashboard()
 
 # Layout using Template
 template = pn.template.FastGridTemplate(
-    title='Dashboard Panel', 
-    sidebar=[pn.Param(dashboard.param, widgets={'yaxis': pn.widgets.RadioButtonGroup})],
+    title='Dashboard-Panel Students Performance', 
+    sidebar=[pn.pane.Markdown("# SideBar"),
+             pn.pane.Markdown("## Settings"),
+             pn.Param(dashboard.param,widgets={'yaxis': pn.widgets.RadioButtonGroup})],
     
-    main=[pn.Row(dashboard.table),
+    main=[pn.Row(pn.pane.Markdown("# Hello World"),dashboard.table),
           pn.Row(pn.Column(dashboard.plot1), pn.Column(dashboard.plot2)),
           pn.Row(dashboard.plotbox)],
     
