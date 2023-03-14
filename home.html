@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <link rel="icon" type="image/x-icon" href="logo_stacked.ico">
+
+    <title>Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <style>
+      /* Add some basic styling to the page */
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f2f2f2;
+      }
+      header {
+        background-color: #3E848C;
+        color: white;
+        padding: 10px;
+      }
+      h1 {
+        font-size: 24px;
+        margin: 0;
+        display: flex; /* Use flexbox to align icon and text */
+        align-items: center; /* Center icon vertically */
+      }
+      i {
+        font-size: 32px; /* Increase icon size */
+        margin-right: 10px; /* Add some spacing between icon and text */
+        color: #fff; /* Change icon color to white */
+      }
+      main {
+        margin-top: 100px; /* Add some space from the top */
+        display: flex;
+        color: #2f576b;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      h2 {
+        font-size: 35px;
+        margin-bottom: 10px;
+        text-align: center;
+      }
+      p {
+        font-size: 16px;
+        text-align: center;
+      }
+      nav {
+        background-color: #f2f2f2;
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+      }
+      button {
+        padding: 10px 20px;
+        margin-right: 10px;
+        background-color: #f2f2f2;
+        color: #3E848C;
+        #border: #3E848C;
+        border-color:#3E848C;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      button:hover {
+        background-color: #3e728c;
+        color: white;
+      }
+      footer {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        background-color: #f2f2f2;
+        color: #3e728c;
+        padding: 10px;
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1><i class="fas fa-home"></i> Home</h1>
+    </header>
+    <main>
+      <h2>Data Visualisation Project</h2>
+      <p>A dashboard enabling the user to explore the dataset : This dashboard should have a side bar in which the user can select different filters (columns of the dataset).
+        The plots (bar plots, scatter plots, box plots, line plots, etc.) should be efficiently designed and each one should give a relevant amount of information.
+      </p>
+      <p>A dashboard to present the results of your analysis and your answer to the business question. Regression, Clustering, Neural Networks, etc, use the Machine Learning algorithms/models you want to answer the question. This dashboard can also be interactive with filters and widgets.</p>
+      <nav>
+        <a href=" http://localhost:5006/dash1"><button>Dashboard 1</button></a>
+        <a href=" http://localhost:5006/dash2"><button>Dashboard 2</button></a>
+
+      </nav>
+    </main>
+    <footer>
+      <p>Author: Roua Acheche, Hamza Azizi</p>
+    </footer>
+  </body>
+</html>
+
+
+
+
+
