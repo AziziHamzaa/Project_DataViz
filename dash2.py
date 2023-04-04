@@ -81,7 +81,7 @@ class InteractiveDashboard(param.Parameterized):
 dashboard = InteractiveDashboard()
 
 # Layout using Template
-template = pn.template.FastListTemplate(
+template = pn.template.VanillaTemplate(
     title = 'Analysis Dashboard', 
     sidebar=[
              pn.pane.Markdown("## Settings"),
