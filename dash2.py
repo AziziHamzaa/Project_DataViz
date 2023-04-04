@@ -13,7 +13,7 @@ from sklearn.preprocessing import StandardScaler
 pn.extension(sizing_mode="stretch_width")
 
 
-ACCENT_COLOR = pn.template.FastListTemplate.accent_base_color
+#ACCENT_COLOR = pn.template.FastListTemplate.accent_base_color
 
 df = pd.read_csv("StudentsPerformance.csv")
 df['total score'] = round((df['math score']+df['reading score']+df['writing score']) / 3, 1) 
@@ -39,17 +39,17 @@ class InteractiveDashboard(param.Parameterized):
             name="Test score",
             value=score,
             format="{value}%",
-            colors=[(85.0, "#E2F313"), (95.0, "#A4DA1E"), (100, "#3E848C")],
+            colors=[(85.0, "#a6bddb"), (95.0, "#3690c0"), (100, "#034e7b")],
         )
         return layout
     def plot_scatter(self):
-        scatter_plot = df.hvplot.scatter(x = self.x1_select , y = self.y_select , color = "#3E848C", title = "Scatter Plot", width=800, height=400)
+        scatter_plot = df.hvplot.scatter(x = self.x1_select , y = self.y_select , color = "#74a9cf", title = "Scatter Plot", width=800, height=400)
         return scatter_plot
     def heatmap(self):
         scaler = StandardScaler()
         X = scaler.fit_transform(df[['math score', 'reading score', 'writing score', 'total score']])
         similarity_matrix = np.corrcoef(X.T)
-        heatmap = pd.DataFrame(similarity_matrix, columns=['math score', 'reading score', 'writing score', 'total score'], index=['math score', 'reading score', 'writing score', 'total score']).hvplot.heatmap(title='Similarity Matrix',cmap = "summer",width=850)
+        heatmap = pd.DataFrame(similarity_matrix, columns=['math score', 'reading score', 'writing score', 'total score'], index=['math score', 'reading score', 'writing score', 'total score']).hvplot.heatmap(title='Similarity Matrix',cmap = "PuBu",width=850)
         return pn.Column(heatmap)
     def clustering(self):
         scaler = StandardScaler()
@@ -59,7 +59,7 @@ class InteractiveDashboard(param.Parameterized):
         kmeans = KMeans(n_clusters=self.n_clusters)
         kmeans.fit(X)
         labels = kmeans.labels_
-        scatter = df.hvplot.scatter(x='math score', y='reading score', c=labels,cmap = "summer", title='Clustering Analysis - KMeans',width=850)
+        scatter = df.hvplot.scatter(x='math score', y='reading score', c=labels,cmap = "PuBu", title='Clustering Analysis - KMeans',width=420)
         
         # Comparing Clustering Results
 
@@ -74,9 +74,9 @@ class InteractiveDashboard(param.Parameterized):
         clust_df = pd.DataFrame(sse, columns=["Sum of Squared Error"])
         clust_df['Number of clusters'] = clust_df.index.map(lambda x:x+1)
 
-        line = clust_df.hvplot.line('Number of clusters','Sum of Squared Error',width=850, color = "#3E848C", title='Clustering Evaluation - KMeans')
+        line = clust_df.hvplot.line('Number of clusters','Sum of Squared Error',width=420, color = "#74a9cf", title='Clustering Evaluation - KMeans')
 
-        return pn.Column(scatter, line)
+        return pn.Column(scatter + line)
 
 dashboard = InteractiveDashboard()
 
@@ -95,8 +95,8 @@ template = pn.template.VanillaTemplate(
             pn.Row(dashboard.clustering),
           ],
     sidebar_width=310,
-    accent_base_color="#3E848C",
-    header_background="#3E848C",
+    accent_base_color="#74a9cf",
+    header_background="#74a9cf",
 
 )
 template.servable()

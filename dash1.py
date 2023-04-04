@@ -8,6 +8,8 @@ import numpy as np
 import seaborn as sns
 import plotly.graph_objects as go
 import matplotlib.pyplot as plt
+from sklearn.preprocessing import StandardScaler
+from PIL import Image
 
 
 # Load Data
@@ -32,22 +34,27 @@ class InteractiveDashboard(param.Parameterized):
     
     @param.depends('yaxis','x_select','y_select')
     
-    
+    def image(self):
+        img_path = 'last_cover.jpg'
+        img = Image.open(img_path)
+        img_pane = pn.pane.PNG(img)
+        return img_pane
+
     def table(self):
         
-        df_widget = pn.widgets.Tabulator(df, layout='fit_data_table', page_size = 10, sizing_mode='stretch_width' )#,header_filters=df_filters)
+        df_widget = pn.widgets.Tabulator(df, layout='fit_data_table', page_size = 10, sizing_mode='stretch_width', selection = [i for i in range(0, len(df), 2)])
         
         return df_widget
     def plot_scatter(self):
-        scatter_plot = df.hvplot.scatter(x = self.x_select , y = self.y_select , color = "#74a9cf", title = "Scatter Plot", width=800, height=400)
+        scatter_plot = df.hvplot.scatter(x = self.x_select , y = self.y_select , color = "#74a9cf", title = "Scatter Plot Correlation Between Scores", width=850)
         return scatter_plot
     def plotbox(self):
         gender_math = df[df.gender.isin(['male','female'])]
-        pl = gender_math.hvplot.box(self.yaxis, by='gender', invert = True, color = "#74a9cf", title = "Box Plot")
+        pl = gender_math.hvplot.box(self.yaxis, by='gender', invert = True, color = "#74a9cf", title = "Box Plot Distribution Of Each Score With Gender", width = 850)
         return pl
     def countBarPlot(self,column):
         table = df[[column,"gender"]].value_counts()
-        pl = table.hvplot.bar(by = column, cmap="PuBu",stacked=True, rot=90, width=800, legend='top_left', title="Count Plot")
+        pl = table.hvplot.bar(by = column, cmap="PuBu",stacked=False, rot=45, width=400, legend='bottom', title="Count Plot "+ column+"\nGrouped By Gender")
         return pl
 
 
@@ -58,27 +65,24 @@ class InteractiveDashboard(param.Parameterized):
         course = df.groupby('test preparation course')[['math score','reading score','writing score','total score']].mean().sort_values(by='total score')
 
         fig = (
-            ethnicity.hvplot.bar(cmap="PuBu",y='total score', xlabel='Race/Ethnicity', ylabel='Average of total score', 
+            ethnicity.hvplot.bar(color = "#74a9cf",y='total score', xlabel='Race/Ethnicity', ylabel='Average of total score', 
                                 width=400, height=400, title='Relation between Race/Ethnicity and\n High Scores') +
-            education.hvplot.bar(cmap="PuBu",y='total score', xlabel='Parental Education', ylabel='Average of total score', 
+            education.hvplot.bar(color = "#74a9cf",y='total score', xlabel='Parental Education', ylabel='Average of total score', 
                                 width=400, height=400, title='Relation between Parental Education\n and High Scores', rot=10) +
-            lunch.hvplot.bar(cmap="PuBu",y='total score', xlabel='Lunch Type', ylabel='Average of total score', 
+            lunch.hvplot.bar(color = "#74a9cf",y='total score', xlabel='Lunch Type', ylabel='Average of total score', 
                             width=400, height=400, title='Relation between Lunch Type\n and High Scores') +
-            course.hvplot.bar(cmap="PuBu",y='total score', xlabel='Test Prep Course', ylabel='Average of total score', 
+            course.hvplot.bar(color = "#74a9cf",y='total score', xlabel='Test Prep Course', ylabel='Average of total score', 
                             width=400, height=400, title='Relation between Test Prep Course \n and High Scores')
         ).cols(2)
         
         return fig
     def corr_heatmap(self):
-    # calculate correlation matrix
-        corr = df.corr()
+        scaler = StandardScaler()
+        X = scaler.fit_transform(df[['math score', 'reading score', 'writing score', 'total score']])
+        similarity_matrix = np.corrcoef(X.T)
+        heatmap = pd.DataFrame(similarity_matrix, columns=['math score', 'reading score', 'writing score', 'total score'], index=['math score', 'reading score', 'writing score', 'total score']).hvplot.heatmap(title='Correlation Matrix Heatmap',cmap = "PuBu",width=850)
+        return pn.Column(heatmap)
 
-        # plot heatmap of correlation matrix
-        fig, ax = plt.subplots(figsize=(8, 6))
-        sns.heatmap(corr, annot=True, cmap='coolwarm', linewidths=0.5, ax=ax)
-        ax.set_title('Correlation Matrix Heatmap')
-    
-        return fig
 
 
 
@@ -93,15 +97,14 @@ template = pn.template.VanillaTemplate(
     
     main=[
           
+          pn.Row(dashboard.image, align = "center"),
           pn.Row(dashboard.table),
-          pn.Row(pn.Column("## Scatter Plot", dashboard.plot_scatter)),
-          pn.Row(pn.Column("Score and Gender", dashboard.plotbox)),
-          pn.pane.Markdown("## Counts plot for various numuric features according gender"),
-          pn.Row(pn.Column(dashboard.countBarPlot('test preparation course'),dashboard.countBarPlot("lunch"),dashboard.countBarPlot('parental level of education'),dashboard.countBarPlot("race/ethnicity"))),
+          pn.Row(pn.Column(dashboard.plot_scatter)),
+          pn.Row(pn.Column(dashboard.plotbox)),
+          pn.Row(pn.Column(dashboard.countBarPlot('test preparation course')+dashboard.countBarPlot("lunch"),dashboard.countBarPlot('parental level of education')+dashboard.countBarPlot("race/ethnicity"))),
           pn.Row(dashboard.plot_score_relations),
           pn.Row(dashboard.corr_heatmap)
-          
-          
+                    
           ],
     #3E848C
     accent_base_color="#74a9cf",
