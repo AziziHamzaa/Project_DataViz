@@ -82,11 +82,79 @@ dashboard = InteractiveDashboard()
 
 # Layout using Template
 template = pn.template.VanillaTemplate(
-    title = 'Analysis Dashboard', 
+    title = 'Machine Learning',
     sidebar=[
              pn.pane.Markdown("## Settings"),
              pn.Param(dashboard.param,widgets={'y_select': pn.widgets.Select,'x1_select': pn.widgets.Select,'x2_select': pn.widgets.Select,'n_clusters': pn.widgets.IntSlider})],
-    
+    header=[pn.pane.HTML("""
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        header {
+            background-color: #74a9cf;
+            color: white;
+            width: 54rem;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: end;
+            justify-content: end;
+
+        }
+
+        .logo-container a {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            text-decoration: none;
+            color: white;
+            margin-right: 20px;
+
+        }
+
+        .logo {
+            font-size: 1.4em;
+            margin-bottom: 0.5em;
+        }
+
+        .logo-title {
+            font-size: 1em;
+            text-align: center;
+            margin-left:5px;
+            margin-bottom:10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+
+        <div class="logo-container">
+             <a href="http://localhost:5006/">
+                <i class="fas fa-home logo"></i>
+                <div class="logo-title">Home</div>
+            </a>
+            <a href="http://localhost:5006/dash1">
+                <i class="fas fa-network-wired logo"></i>
+                <div class="logo-title">Analysis Dashboard</div>
+            </a>
+
+
+        </div>
+
+    </header>
+    <!-- rest of the page content goes here -->
+</body>
+</html>
+
+
+
+
+
+                        """)],
     main=[
             pn.Row(dashboard.heatmap),
             pn.Row(pn.Column("## Training Linear Regression Model To Predict Either Writing, Math Or Reading Scores.",

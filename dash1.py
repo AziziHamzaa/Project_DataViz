@@ -42,7 +42,7 @@ class InteractiveDashboard(param.Parameterized):
 
     def table(self):
         
-        df_widget = pn.widgets.Tabulator(df, layout='fit_data_table', page_size = 10, sizing_mode='stretch_width', selection = [i for i in range(0, len(df), 2)])
+        df_widget = pn.widgets.Tabulator(df, layout='fit_data_table', page_size = 10, sizing_mode='stretch_width')
         
         return df_widget
     def plot_scatter(self):
@@ -90,11 +90,79 @@ dashboard = InteractiveDashboard()
 
 # Layout using Template
 template = pn.template.VanillaTemplate(
-    title = 'Explore Dashboard', 
+    title = 'Analysis Dashboard',
     sidebar=[
              pn.pane.Markdown("## Settings"),
              pn.Param(dashboard.param,widgets={'yaxis': pn.widgets.Select,'y_select': pn.widgets.Select,'x_select': pn.widgets.Select})],
-    
+    header=[pn.pane.HTML("""
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        header {
+            background-color: #74a9cf;
+            color: white;
+            width: 54rem;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: end;
+            justify-content: end;
+
+        }
+
+        .logo-container a {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            text-decoration: none;
+            color: white;
+            margin-right: 20px;
+
+        }
+
+        .logo {
+            font-size: 1.4em;
+            margin-bottom: 0.5em;
+        }
+
+        .logo-title {
+            font-size: 1em;
+            text-align: center;
+            margin-left:5px;
+            margin-bottom:10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+
+        <div class="logo-container">
+             <a href="http://localhost:5006/">
+                <i class="fas fa-home logo"></i>
+                <div class="logo-title">Home</div>
+            </a>
+            <a href="http://localhost:5006/dash2">
+                <i class="fas fa-network-wired logo"></i>
+                <div class="logo-title">Machine Learning</div>
+            </a>
+
+
+        </div>
+
+    </header>
+    <!-- rest of the page content goes here -->
+</body>
+</html>
+
+
+
+
+
+                        """)],
     main=[
           
           pn.Row(dashboard.image, align = "center"),
