@@ -1,4 +1,8 @@
 # Student Performance in Exams Data Analysis Project
+## Carried Out By : 
+* Roua ACHECHE
+* Hamza AZIZI
+
 ## Project Description
 The purpose of this project is to answer a business question related to the performance of high school students in the United States in math, reading, and writing exams. Specifically, the question we aim to answer is:
 
